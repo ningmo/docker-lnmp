@@ -4,7 +4,6 @@ nginx:
   ports:
     - "80:80"
   volumes:
-    # app
     - /home/www:/usr/share/nginx/html:rw
     - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     - ./nginx/conf.d/:/etc/nginx/conf.d/:ro
@@ -18,17 +17,20 @@ fpm5:
     - "9000"
   volumes:
     - /home/www:/usr/share/nginx/html:rw
-    # Your php.ini
     - ./php-fpm56/php.ini:/usr/local/etc/php/php.ini:ro
-  # environment:
-    # Set your APP env variables here:
-    # - APP_KEY=
-    # - DB_HOST=
-    # - DB_DATABASE=
-    # - DB_USERNAME=
-    # - DB_PASSWORD=
   links:
     - mysql:mysql
+
+# php7
+#fpm:
+#  build: ./php-fpm
+#  ports:
+#    - "9000"
+#  volumes:
+#    - /home/www:/usr/share/nginx/html:rw
+#    - ./php-fpm/php.ini:/usr/local/etc/php/php.ini:ro
+#  links:
+#    - mysql:mysql
 
 # composer:
 #   image: composer:1
