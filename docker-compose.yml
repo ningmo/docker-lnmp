@@ -1,6 +1,6 @@
 # web server
 nginx:
-  image: nginx:latest
+  image: nginx:1.15
   ports:
     - "80:80"
   volumes:
@@ -9,6 +9,11 @@ nginx:
     - ./nginx/conf.d/:/etc/nginx/conf.d/:ro
   links:
     - fpm5:__DOCKER_PHP_FPM__
+  extra_hosts:
+    - "api.center.gbicom.test:10.10.112.236"
+    - "update.zxripr.com:39.107.79.31"
+    - "qzha.qzh.test:10.10.112.236"
+    - "gbicom.test:10.10.112.236"
 
 # php-fpm
 fpm5:
@@ -20,17 +25,21 @@ fpm5:
     - ./php-fpm56/php.ini:/usr/local/etc/php/php.ini:ro
   links:
     - mysql:mysql
+  extra_hosts:
+    - "api.center.gbicom.test:10.10.112.236"
+    - "update.zxripr.com:39.107.79.31"
+    - "qzha.qzh.test:10.10.112.236"
+    - "gbicom.test:10.10.112.236"
 
-# php7
-#fpm:
-#  build: ./php-fpm
-#  ports:
-#    - "9000"
-#  volumes:
-#    - /home/www:/usr/share/nginx/html:rw
-#    - ./php-fpm/php.ini:/usr/local/etc/php/php.ini:ro
-#  links:
-#    - mysql:mysql
+fpm:
+ build: ./php-fpm
+ ports:
+   - "9001:9000"
+ volumes:
+   - /home/www:/usr/share/nginx/html:rw
+   - ./php-fpm/php.ini:/usr/local/etc/php/php.ini:ro
+ links:
+   - mysql:mysql
 
 # composer:
 #   image: composer:1
@@ -40,7 +49,7 @@ fpm5:
 
 # database
 mysql:
-  image: mysql:latest
+  image: mysql:5.7
   ports:
     - "3306:3306"
   volumes:

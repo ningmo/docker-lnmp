@@ -26,4 +26,3 @@ RUN pecl install -o -f redis \
 	&&  docker-php-ext-enable redis
 
 RUN docker-php-ext-install -j$(nproc)  mysqli  zip mbstring pdo_mysql
-
