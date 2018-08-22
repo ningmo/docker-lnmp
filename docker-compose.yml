@@ -41,12 +41,35 @@ fpm7:
    - ./php-fpm7/php.ini:/usr/local/etc/php/php.ini:ro
  # links:
  #   - mysql:mysql
+ cap_add:
+   - SYS_PTRACE
+ environment:
+   - DB_PATENT_NAME=patent
+   - DB_PATENT_HOST=10.10.112.236
+   - DB_PATENT_USER=root
+   - DB_PATENT_PASSWD=111222
+   - DB_PATENT_PORT=3306
+   - DB_PATENT_PREFIX=patent_
+
+   - CR_CENTER_DB=cr_center
+   - CR_CENTER_HOST=10.10.112.236
+   - CR_CENTER_USER=root
+   - CR_CENTER_PASSWD=111222
+   - CR_CENTER_PORT=3306
+   
+   - ES_HOST=10.10.112.236:9200
+   - REDIS_HOST=10.10.112.236
+   - REDIS_PORT=6379
+   
+
 
 # composer:
 #   image: composer:1
 #   volumes: 
-#     - /home/www/tt/jwt:/app:rw
-#   command: composer require lcobucci/jwt
+#     - /home/www/Patent:/app:rw
+#   command: 
+#     - which composer 
+#     - php composer.phar install  
 
 # database
 # mysql:
