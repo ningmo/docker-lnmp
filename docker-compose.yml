@@ -15,6 +15,7 @@ nginx:
     - "update.zxripr.com:39.107.79.31"
     - "qzha.qzh.test:10.10.112.236"
     - "gbicom.test:10.10.112.236"
+    - "api.tes.test:10.10.112.236"
 
 # php-fpm
 fpm5:
@@ -31,6 +32,7 @@ fpm5:
     - "update.zxripr.com:39.107.79.31"
     - "qzha.qzh.test:10.10.112.236"
     - "gbicom.test:10.10.112.236"
+    - "api.tes.test:10.10.112.236"
 
 fpm7:
  build: ./php-fpm7
@@ -41,8 +43,6 @@ fpm7:
    - ./php-fpm7/php.ini:/usr/local/etc/php/php.ini:ro
  # links:
  #   - mysql:mysql
- cap_add:
-   - SYS_PTRACE
  environment:
    - DB_PATENT_NAME=patent
    - DB_PATENT_HOST=10.10.112.236
@@ -58,18 +58,18 @@ fpm7:
    - CR_CENTER_PORT=3306
    
    - ES_HOST=10.10.112.236:9200
-   - REDIS_HOST=10.10.112.236
+   - REDIS_HOST=10.10.112.195
    - REDIS_PORT=6379
    
 
-
+# docker run --rm --interactive --tty --volume /home/www/gbicom.cn.new:/app composer install --ignore-platform-reqs --no-scripts
 # composer:
 #   image: composer:1
 #   volumes: 
-#     - /home/www/Patent:/app:rw
+#     - /home/www/gbicom.cn.new:/app:rw
+#   working_dir: /app
 #   command: 
-#     - which composer 
-#     - php composer.phar install  
+#     - composer install  
 
 # database
 # mysql:

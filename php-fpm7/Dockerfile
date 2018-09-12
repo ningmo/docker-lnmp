@@ -2,25 +2,46 @@
 # See: https://hub.docker.com/_/php/
 ######
 
-FROM php:7.2-fpm
-MAINTAINER micooz <micooz@hotmail.com>
+FROM php:7-fpm-alpine
 
-######
-# You can install php extensions using docker-php-ext-install
-######
-RUN usermod -u 1000 www-data
-RUN apt-get update && apt-get install -y \
-        libfreetype6-dev \
-        libjpeg62-turbo-dev \
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories &&\
+        apk update &&\
+        apk add --update --no-cache --virtual .ext-deps \
+        libjpeg-turbo-dev \
+        libwebp-dev \
+        libpng-dev \
+        freetype-dev \
         libmcrypt-dev \
-        libpng12-dev
+        autoconf \
+        g++ \
+        zlib \
+        gcc \
+        libc-dev \
+        make \
+        cyrus-sasl-dev 
 
-RUN docker-php-ext-install -j$(nproc) iconv mcrypt \
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-    && docker-php-ext-install -j$(nproc) gd
+RUN docker-php-ext-configure pdo_mysql && \
+    docker-php-ext-configure gd \
+    --with-jpeg-dir=/usr/include --with-png-dir=/usr/include --with-webp-dir=/usr/include --with-freetype-dir=/usr/include && \
+    docker-php-ext-install pdo_mysql exif gd && \
+    apk add --no-cache --virtual .mongodb-ext-build-deps openssl-dev pcre-dev && \
+    pecl install redis && \
+    pecl clear-cache && \
+    docker-php-ext-enable redis && \
+    docker-php-source delete
 
-RUN pecl install -o -f redis \
+
+RUN addgroup -g 1000 -S www && adduser -u 1000 -D -S -G www www
+
+
+#RUN usermod -u 1000 www-data
+
+#RUN docker-php-ext-install -j$(nproc) iconv mcrypt \
+#    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+#    && docker-php-ext-install -j$(nproc) gd
+
+#RUN pecl install -o -f redis \
 #	&&  rm -rf /tmp/pear \
-	&&  docker-php-ext-enable redis
+#	&&  docker-php-ext-enable redis
 
-RUN docker-php-ext-install -j$(nproc)  mysqli  zip pdo_mysql
+#RUN docker-php-ext-install -j$(nproc)  mysqli  zip pdo_mysql
