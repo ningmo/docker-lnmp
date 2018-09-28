@@ -60,16 +60,6 @@ fpm7:
    - ES_HOST=10.10.112.236:9200
    - REDIS_HOST=10.10.112.195
    - REDIS_PORT=6379
-   
-
-# docker run --rm --interactive --tty --volume /home/www/gbicom.cn.new:/app composer install --ignore-platform-reqs --no-scripts
-# composer:
-#   image: composer:1
-#   volumes: 
-#     - /home/www/gbicom.cn.new:/app:rw
-#   working_dir: /app
-#   command: 
-#     - composer install  
 
 # database
 # mysql:

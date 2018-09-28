@@ -31,17 +31,13 @@ RUN docker-php-ext-configure pdo_mysql && \
     docker-php-source delete
 
 
-RUN addgroup -g 1000 -S www && adduser -u 1000 -D -S -G www www
-
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
+php composer-setup.php && \
+php -r "unlink('composer-setup.php');" && \
+mv composer.phar /usr/local/bin/composer 
 
 #RUN usermod -u 1000 www-data
-
-#RUN docker-php-ext-install -j$(nproc) iconv mcrypt \
-#    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-#    && docker-php-ext-install -j$(nproc) gd
-
-#RUN pecl install -o -f redis \
-#	&&  rm -rf /tmp/pear \
-#	&&  docker-php-ext-enable redis
-
-#RUN docker-php-ext-install -j$(nproc)  mysqli  zip pdo_mysql
+# 文件挂载后 权限1000  默认用户www-data id 82 
+RUN sed -i 's/www-data/www/g' /usr/local/etc/php-fpm.d/www.conf
+RUN cat /usr/local/etc/php-fpm.d/www.conf
+RUN addgroup -g 1000 -S www && adduser -u 1000 -D -S -G www www
