@@ -4,72 +4,50 @@ nginx:
   ports:
     - "80:80"
   volumes:
-    - /home/www:/usr/share/nginx/html:rw
+    - /Users/y/data/www:/usr/share/nginx/html:rw
     - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     - ./nginx/conf.d/:/etc/nginx/conf.d/:ro
   links:
     - fpm5:__DOCKER_PHP5_FPM__
     - fpm7:__DOCKER_PHP7_FPM__
-  extra_hosts:
-    - "api.center.gbicom.test:10.10.112.236"
-    - "update.zxripr.com:39.107.79.31"
-    - "qzha.qzh.test:10.10.112.236"
-    - "gbicom.test:10.10.112.236"
-    - "api.tes.test:10.10.112.236"
+
 # php-fpm
 fpm5:
   build: ./php-fpm56
   ports:
     - "9000"
   volumes:
-    - /home/www:/usr/share/nginx/html:rw
+    - /Users/y/data/www:/usr/share/nginx/html:rw
     - ./php-fpm56/php.ini:/usr/local/etc/php/php.ini:ro
-  # links:
-  #   - mysql:mysql
-  extra_hosts:
-    - "api.center.gbicom.test:10.10.112.236"
-    - "update.zxripr.com:39.107.79.31"
-    - "qzha.qzh.test:10.10.112.236"
-    - "gbicom.test:10.10.112.236"
-    - "api.tes.test:10.10.112.236"
 
 fpm7:
  build: ./php-fpm7
  ports:
-   - "9001:9000"
- links:
-   - mysql:mysql
+   - 9000
+ # links:
+ #   - mysql:mysql
  volumes:
-   - /home/www:/usr/share/nginx/html:rw
-   - ./php-fpm7/php.ini:/usr/local/etc/php/php.ini:ro
-   - ./php-fpm7/installer:/usr/installer:ro
+   - /Users/y/data/www:/usr/share/nginx/html:rw
+   - ./php-fpm7/php.ini:/usr/local/etc/php/php.ini
+   - ./php-fpm7/installer:/usr/installer
  environment:
-   - DB_PATENT_NAME=patent
-   - DB_PATENT_HOST=10.10.112.236
-   - DB_PATENT_USER=root
-   - DB_PATENT_PASSWD=111222
-   - DB_PATENT_PORT=3306
-   - DB_PATENT_PREFIX=patent_
-
    - CR_CENTER_DB=cr_center
    - CR_CENTER_HOST=10.10.112.236
    - CR_CENTER_USER=root
    - CR_CENTER_PASSWD=111222
    - CR_CENTER_PORT=3306
-   
-   - ES_HOST=10.10.112.236:9200
+   - ES_HOST=es.d.gbicom.com:80
    - REDIS_HOST=10.10.112.195
    - REDIS_PORT=6379
 
-# database
-mysql:
-  image: mysql:5.7
-  ports:
-    - "3306:3306"
-  volumes:
-    - ./mysql:/var/lib/mysql
-  environment:
-    - MYSQL_ROOT_PASSWORD=111222
+# mysql:
+#   image: mysql:5.7
+#   ports:
+#     - "3306:3306"
+#   volumes:
+#     - ./mysql:/var/lib/mysql
+#   environment:
+#     - MYSQL_ROOT_PASSWORD=111222
 
 # redis:
 #   image: redis:5.0

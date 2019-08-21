@@ -21,11 +21,7 @@ RUN docker-php-ext-install -j$(nproc) iconv mcrypt \
     && docker-php-ext-install -j$(nproc) gd 
 
 
-RUN pecl install -o -f redis \
-	&&  rm -rf /tmp/pear \
-	&&  docker-php-ext-enable redis
-
-RUN docker-php-ext-install -j$(nproc)  mysqli  zip mbstring pdo_mysql 
+RUN docker-php-ext-install -j$(nproc) mysqli zip mbstring pdo_mysql 
 
 RUN apt-get install wget autoconf -y
 RUN apt-get update
@@ -46,3 +42,4 @@ RUN apt-get update
 #	docker-php-ext-enable amqp
 
 RUN docker-php-ext-install -j$(nproc)  bcmath 
+RUN pecl install https://pecl.php.net/get/redis-2.2.8.tgz
